@@ -30,7 +30,9 @@ var usuario = {
 	//usuario que recibimos por la URL
 	//function(respuesta) callback para recibir lista de usuarios conectados o un mensaje de error por no enviar el usuario
 	socket.emit('entrarChat', usuario, function(respuesta){
-		console.log('Usuarios conectados ', respuesta);
+		//console.log('Usuarios conectados ', respuesta);
+		//llamamos a la función renderizarUsuarios() de public/js/socket-chat-jquery.js
+		renderizarUsuarios(respuesta);
 	});
 
 });
@@ -54,14 +56,19 @@ var usuario = {
 //'crearMensaje' es el nombre del evento que se envio desde el server
 //'mensaje' es el objeto que enviamos desde el server
 socket.on('crearMensaje', function (mensaje)  {
-	console.log('Respuesta Server:', mensaje);
+	//console.log('Respuesta Server:', mensaje);
+	//llamamos a la función renderizarMensajes() y scrollBottom() de public/js/socket-chat-jquery.js
+	renderizarMensajes(mensaje, false);
+    scrollBottom();
 });
 
 //Función para saber cuando un usuario entra o sale del chat
 //'listaPersona' es el nombre del evento que se envio desde el server
 //'personas' es el objeto que enviamos desde el server
 socket.on('listaPersona', function (personas)  {
-	console.log(personas);
+	//console.log(personas);
+	//llamamos a la función renderizarUsuarios() de public/js/socket-chat-jquery.js
+	renderizarUsuarios(respuesta);
 });
 
 //Mensajes privados

@@ -33,18 +33,23 @@ io.on('connection', (client) => {
 		//cada vez que alguien entra o sale de una misma sala se les notifica a los integrantes de la misma
 		client.broadcast.to(usuario.sala).emit('listaPersona', usuarios.getPersonasPorSala(usuario.sala));
 
+		//enviamos el mensaje para informar que un usario se unió a una misma sala
+		client.broadcast.to(usuario.sala).emit('crearMensaje', crearMensaje('Administrador',`${ usuario.nombre } se unió el chat`));
+		
 		//retornamos los usuarios conectados a una misma sala
 		callback(usuarios.getPersonasPorSala(usuario.sala));
 	});
 
-	//Para recibir el mensaje que envio el cliente y enviarselo a todos los clientes
-	client.on('crearMensaje', (data) => {
+	//Para recibir el mensaje que envio el cliente y enviarselo a todos los clientes de la misma sala
+	client.on('crearMensaje', (data, callback) => {
 		//obtenemos los datos del usuario que envio el mensaje
 		let persona = usuarios.getPersona(client.id);
 		//crearMensaje(data.nombre,data.mensaje)=>función ../utilidades/utilidades
 		let mensaje = crearMensaje(persona.nombre,data.mensaje);
 		//enviamos el mensaje que creamos a todos los usuarios conectados a una misma sala
 		client.broadcast.to(persona.sala).emit('crearMensaje', mensaje);
+		//retornamos el mensaje a los usuarios conectados a una misma sala
+		callback(mensaje);
 
 	});
 
